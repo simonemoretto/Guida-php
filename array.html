@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Associativi PHP</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            animation: fadeIn 0.8s ease;
+            min-height: 100vh;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            background: linear-gradient(135deg, #777bb3 0%, #4f5b93 100%);
+            color: white;
+            padding: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 4px 20px rgba(119, 123, 179, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.1) translate(5%, 5%); }
+        }
+
+        header h1 {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+        }
+
+        main {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            margin: 40px auto;
+            padding: 40px;
+            width: 85%;
+            max-width: 1000px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h2 {
+            color: #777bb3;
+            font-size: 26px;
+            margin-top: 30px;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #777bb3, transparent);
+            border-radius: 2px;
+        }
+
+        section {
+            margin: 30px 0;
+            padding: 25px;
+            background: rgba(119, 123, 179, 0.05);
+            border-radius: 15px;
+            border-left: 4px solid #777bb3;
+            transition: all 0.3s ease;
+        }
+
+        section:hover {
+            background: rgba(119, 123, 179, 0.1);
+            transform: translateX(5px);
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.8;
+            text-align: left;
+        }
+
+        pre {
+            background: #1a1a2e;
+            color: #8892bf;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            overflow-x: auto;
+            border: 1px solid #777bb3;
+            box-shadow: 0 4px 15px rgba(119, 123, 179, 0.2);
+            position: relative;
+        }
+
+        pre::before {
+            content: 'PHP';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #777bb3;
+            font-size: 12px;
+            font-weight: bold;
+            opacity: 0.5;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            color: #8892bf;
+            background: rgba(119, 123, 179, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        a {
+            color: #8892bf;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        a:hover {
+            color: #777bb3;
+        }
+
+        a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #777bb3;
+            transition: width 0.3s ease;
+        }
+
+        a:hover::after {
+            width: 100%;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        li {
+            background: rgba(119, 123, 179, 0.08);
+            margin: 12px 0;
+            padding: 15px 15px 15px 50px;
+            border-radius: 8px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        li::before {
+            content: '▶';
+            position: absolute;
+            left: 20px;
+            color: #777bb3;
+            font-size: 12px;
+        }
+
+        li:hover {
+            background: rgba(119, 123, 179, 0.15);
+            transform: translateX(5px);
+        }
+
+        button {
+            background: linear-gradient(135deg, #777bb3 0%, #4f5b93 100%);
+            color: white;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(119, 123, 179, 0.3);
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(119, 123, 179, 0.5);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hidden {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s ease;
+        }
+
+        .show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #777bb3 0%, #4f5b93 100%);
+            z-index: 9999;
+            transform: translateX(-100%);
+            animation: pageTransition 0.5s ease forwards;
+            pointer-events: none;
+        }
+
+        @keyframes pageTransition {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(0); }
+        }
+
+        .button-container {
+            margin-top: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Array Associativi in PHP</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Cosa sono gli Array?</h2>
+            <p>Un array è una variabile che può contenere più valori. In PHP esistono tre tipi di array:</p>
+            <ul>
+                <li><strong>Array indicizzati</strong>: usano indici numerici (0, 1, 2...)</li>
+                <li><strong>Array associativi</strong>: usano chiavi nominate</li>
+                <li><strong>Array multidimensionali</strong>: array che contengono altri array</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Array Indicizzati</h2>
+            <p>Gli array indicizzati usano numeri come indici (partendo da 0):</p>
+            <pre><code>&lt;?php
+    // Creazione di un array indicizzato
+    $frutti = array("Mela", "Banana", "Arancia");
+    
+    // Sintassi alternativa (PHP 5.4+)
+    $colori = ["Rosso", "Verde", "Blu"];
+    
+    // Accesso agli elementi
+    echo $frutti[0];  // Output: Mela
+    echo $colori[2];  // Output: Blu
+    
+    // Lunghezza dell'array
+    echo count($frutti);  // Output: 3
+?&gt;</code></pre>
+        </section>
+
+        <section>
+            <h2>Array Associativi</h2>
+            <p>Gli array associativi usano chiavi nominate invece di indici numerici. Sono perfetti per rappresentare dati strutturati:</p>
+            <pre><code>&lt;?php
+    // Creazione di un array associativo
+    $persona = array(
+        "nome" => "Mario",
+        "cognome" => "Rossi",
+        "eta" => 30,
+        "citta" => "Roma"
+    );
+    
+    // Sintassi alternativa
+    $auto = [
+        "marca" => "Fiat",
+        "modello" => "Panda",
+        "anno" => 2023,
+        "colore" => "Bianco"
+    ];
+    
+    // Accesso ai valori tramite chiave
+    echo $persona["nome"];     // Output: Mario
+    echo $auto["marca"];       // Output: Fiat
+?&gt;</code></pre>
+            <p><strong>Vantaggi degli array associativi:</strong></p>
+            <ul>
+                <li>Più leggibili: le chiavi descrivono i dati</li>
+                <li>Facili da manutenere</li>
+                <li>Ideali per rappresentare oggetti o entità</li>
+                <li>Perfetti per configurazioni e impostazioni</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Iterare su Array Associativi</h2>
+            <p>Puoi scorrere gli array associativi usando il ciclo <code>foreach</code>:</p>
+            <pre><code>&lt;?php
+    $studente = [
+        "nome" => "Laura",
+        "corso" => "Informatica",
+        "anno" => 2,
+        "voto_medio" => 28
+    ];
+    
+    // Iterare solo sui valori
+    foreach ($studente as $valore) {
+        echo $valore . "&lt;br&gt;";
+    }
+    
+    // Iterare su chiavi e valori
+    foreach ($studente as $chiave => $valore) {
+        echo $chiave . ": " . $valore . "&lt;br&gt;";
+    }
+    
+    /* Output:
+       nome: Laura
+       corso: Informatica
+       anno: 2
+       voto_medio: 28
+    */
+?&gt;</code></pre>
+        </section>
+
+        <section>
+            <h2>Modificare Array Associativi</h2>
+            <p>Puoi aggiungere, modificare o rimuovere elementi dagli array:</p>
+            <pre><code>&lt;?php
+    $prodotto = [
+        "nome" => "Laptop",
+        "prezzo" => 899
+    ];
+    
+    // Aggiungere un nuovo elemento
+    $prodotto["marca"] = "HP";
+    
+    // Modificare un elemento esistente
+    $prodotto["prezzo"] = 799;
+    
+    // Rimuovere un elemento
+    unset($prodotto["marca"]);
+    
+    // Verificare se una chiave esiste
+    if (array_key_exists("nome", $prodotto)) {
+        echo "Il prodotto ha un nome";
+    }
+    
+    // Metodo alternativo con isset()
+    if (isset($prodotto["prezzo"])) {
+        echo "Prezzo: " . $prodotto["prezzo"];
+    }
+?&gt;</code></pre>
+        </section>
+
+        <section>
+            <h2>Array Multidimensionali</h2>
+            <p>Gli array possono contenere altri array, creando strutture complesse:</p>
+            <pre><code>&lt;?php
+    // Array di studenti
+    $classe = [
+        [
+            "nome" => "Mario",
+            "voti" => [28, 30, 27]
+        ],
+        [
+            "nome" => "Laura",
+            "voti" => [29, 28, 30]
+        ],
+        [
+            "nome" => "Giuseppe",
+            "voti" => [25, 26, 28]
+        ]
+    ];
+    
+    // Accedere agli elementi
+    echo $classe[0]["nome"];      // Output: Mario
+    echo $classe[1]["voti"][0];   // Output: 29
+    
+    // Iterare su array multidimensionale
+    foreach ($classe as $studente) {
+        echo $studente["nome"] . ": ";
+        
+        foreach ($studente["voti"] as $voto) {
+            echo $voto . " ";
+        }
+        echo "&lt;br&gt;";
+    }
+?&gt;</code></pre>
+        </section>
+
+        <section>
+            <h2>Funzioni Utili per Array</h2>
+            <p>PHP offre molte funzioni per lavorare con gli array:</p>
+            <pre><code>&lt;?php
+    $numeri = [5, 2, 8, 1, 9];
+    
+    // Ordinare array
+    sort($numeri);           // Ordina in modo crescente
+    rsort($numeri);          // Ordina in modo decrescente
+    
+    // Per array associativi
+    $eta = ["Mario" => 30, "Laura" => 25, "Giuseppe" => 35];
+    asort($eta);             // Ordina per valore
+    ksort($eta);             // Ordina per chiave
+    
+    // Altre funzioni utili
+    count($numeri);          // Conta elementi
+    in_array(5, $numeri);    // Verifica se esiste un valore
+    array_push($numeri, 10); // Aggiunge elemento alla fine
+    array_pop($numeri);      // Rimuove ultimo elemento
+    array_merge($arr1, $arr2); // Unisce due array
+    
+    // Ottenere chiavi e valori
+    $chiavi = array_keys($eta);      // Ottiene tutte le chiavi
+    $valori = array_values($eta);    // Ottiene tutti i valori
+?&gt;</code></pre>
+        </section>
+
+        <section>
+            <h2>Esempio Pratico: Lista della Spesa</h2>
+            <pre><code>&lt;?php
+    $spesa = [
+        "Pane" => ["quantita" => 2, "prezzo" => 1.50],
+        "Latte" => ["quantita" => 1, "prezzo" => 1.20],
+        "Uova" => ["quantita" => 12, "prezzo" => 3.00],
+        "Pasta" => ["quantita" => 3, "prezzo" => 0.90]
+    ];
+    
+    $totale = 0;
+    
+    echo "&lt;h3&gt;Lista della Spesa&lt;/h3&gt;";
+    echo "&lt;ul&gt;";
+    
+    foreach ($spesa as $prodotto => $dettagli) {
+        $subtotale = $dettagli["quantita"] * $dettagli["prezzo"];
+        $totale += $subtotale;
+        
+        echo "&lt;li&gt;";
+        echo $prodotto . " - ";
+        echo "Quantità: " . $dettagli["quantita"] . " - ";
+        echo "Prezzo: €" . $dettagli["prezzo"] . " - ";
+        echo "Subtotale: €" . number_format($subtotale, 2);
+        echo "&lt;/li&gt;";
+    }
+    
+    echo "&lt;/ul&gt;";
+    echo "&lt;strong&gt;Totale: €" . number_format($totale, 2) . "&lt;/strong&gt;";
+?&gt;</code></pre>
+        </section>
+
+        <div class="button-container">
+            <button onclick="navigateTo('index.html')"><span>Torna alla Home</span></button>
+            <button onclick="navigateTo('strutture-controllo.html')"><span>Strutture di Controllo</span></button>
+            <button onclick="navigateTo('get-post.html')"><span>GET e POST</span></button>
+        </div>
+        
+        <p><a href="https://www.php.net/manual/it/language.types.array.php" target="_blank">Documentazione ufficiale sugli array</a></p>
+    </main>
+
+    <script>
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('section, h2, p, pre, ul');
+            
+            elements.forEach(element => {
+                element.classList.add('hidden');
+            });
+            
+            function checkIfInView() {
+                elements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementBottom = element.getBoundingClientRect().bottom;
+                    const isVisible = elementTop < window.innerHeight && elementBottom > 0;
+                    
+                    if (isVisible) {
+                        element.classList.add('show');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', checkIfInView);
+            window.addEventListener('resize', checkIfInView);
+            setTimeout(checkIfInView, 300);
+        }
+
+        function navigateTo(page) {
+            const transition = document.createElement('div');
+            transition.className = 'page-transition';
+            document.body.appendChild(transition);
+            
+            setTimeout(() => {
+                window.location.href = page;
+            }, 500);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            handleScrollAnimations();
+        });
+    </script>
+</body>
+</html>

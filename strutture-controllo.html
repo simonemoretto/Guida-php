@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strutture di Controllo PHP</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            animation: fadeIn 0.8s ease;
+            min-height: 100vh;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            background: linear-gradient(135deg, #777bb3 0%, #4f5b93 100%);
+            color: white;
+            padding: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 4px 20px rgba(119, 123, 179, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.1) translate(5%, 5%); }
+        }
+
+        header h1 {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+        }
+
+        main {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            margin: 40px auto;
+            padding: 40px;
+            width: 85%;
+            max-width: 1000px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h2 {
+            color: #777bb3;
+            font-size: 26px;
+            margin-top: 30px;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #777bb3, transparent);
+            border-radius: 2px;
+        }
+
+        section {
+            margin: 30px 0;
+            padding: 25px;
+            background: rgba(119, 123, 179, 0.05);
+            border-radius: 15px;
+            border-left: 4px solid #777bb3;
+            transition: all 0.3s ease;
+        }
+
+        section:hover {
+            background: rgba(119, 123, 179, 0.1);
+            transform: translateX(5px);
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.8;
+            text-align: left;
+        }
+
+        pre {
+            background: #1a1a2e;
+            color: #8892bf;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            overflow-x: auto;
+            border: 1px solid #777bb3;
+            box-shadow: 0 4px 15px rgba(119, 123, 179, 0.2);
+            position: relative;
+        }
+
+        pre::before {
+            content: 'PHP';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #777bb3;
+            font-size: 12px;
+            font-weight: bold;
+            opacity: 0.5;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            color: #8892bf;
+            background: rgba(119, 123, 179, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        a {
+            color: #8892bf;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        a:hover {
+            color: #777bb3;
+        }
+
+        a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #777bb3;
+            transition: width 0.3s ease;
+        }
+
+        a:hover::after {
+            width: 100%;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        li {
+            background: rgba(119, 123, 179, 0.08);
+            margin: 12px 0;
+            padding: 15px 15px 15px 50px;
+            border-radius: 8px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        li::before {
+            content: '▶';
+            position: absolute;
+            left: 20px;
+            color: #777bb3;
+            font-size: 12px;
+        }
+
+        li:hover {
+            background: rgba(119, 123, 179, 0.15);
+            transform: translateX(5px);
+        }
+
+        button {
+            background: linear-gradient(135deg, #777bb3 0%, #4f5b93 100%);
+            color: white;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(119, 123, 179, 0.3);
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(119, 123, 179, 0.5);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hidden {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s ease;
+        }
+
+        .show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #777bb3 0%, #4f5b93 100%);
+            z-index: 9999;
+            transform: translateX(-100%);
+            animation: pageTransition 0.5s ease forwards;
+            pointer-events: none;
+        }
+
+        @keyframes pageTransition {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(0); }
+        }
+
+        .button-container {
+            margin-top: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Strutture di Controllo PHP</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Istruzione IF - Condizioni</h2>
+            <p>L'istruzione <code>if</code> permette di eseguire codice solo se una condizione è vera. È possibile aggiungere <code>else</code> per specificare cosa fare quando la condizione è falsa.</p>
+            <pre><code>&lt;?php
+    $eta = 18;
+    
+    if ($eta >= 18) {
+        echo "Sei maggiorenne!";
+    } else {
+        echo "Sei minorenne!";
+    }
+?&gt;</code></pre>
+            <p><strong>Operatori di confronto comuni:</strong></p>
+            <ul>
+                <li><code>==</code>: uguale a (confronto valore)</li>
+                <li><code>===</code>: identico a (confronto valore e tipo)</li>
+                <li><code>!=</code> o <code>&lt;&gt;</code>: diverso da</li>
+                <li><code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>: minore, maggiore, minore o uguale, maggiore o uguale</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>IF con ELSEIF - Condizioni Multiple</h2>
+            <p>Quando hai bisogno di verificare più condizioni, puoi usare <code>elseif</code>:</p>
+            <pre><code>&lt;?php
+    $voto = 85;
+    
+    if ($voto >= 90) {
+        echo "Ottimo!";
+    } elseif ($voto >= 70) {
+        echo "Buono!";
+    } elseif ($voto >= 60) {
+        echo "Sufficiente!";
+    } else {
+        echo "Insufficiente!";
+    }
+?&gt;</code></pre>
+        </section>
+
+        <section>
+            <h2>Ciclo FOR - Iterazione con Contatore</h2>
+            <p>Il ciclo <code>for</code> esegue un blocco di codice un numero specifico di volte:</p>
+            <pre><code>&lt;?php
+    // Stampa i numeri da 1 a 5
+    for ($i = 1; $i <= 5; $i++) {
+        echo "Numero: " . $i . "&lt;br&gt;";
+    }
+?&gt;</code></pre>
+            <p><strong>Componenti del ciclo for:</strong></p>
+            <ul>
+                <li><code>$i = 1</code>: inizializzazione (eseguita una volta all'inizio)</li>
+                <li><code>$i <= 5</code>: condizione (verificata prima di ogni iterazione)</li>
+                <li><code>$i++</code>: incremento (eseguito dopo ogni iterazione)</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Ciclo FOREACH - Iterazione su Array</h2>
+            <p>Il ciclo <code>foreach</code> è perfetto per scorrere gli elementi di un array:</p>
+            <pre><code>&lt;?php
+    $frutti = array("Mela", "Banana", "Arancia");
+    
+    foreach ($frutti as $frutto) {
+        echo "Mi piace: " . $frutto . "&lt;br&gt;";
+    }
+?&gt;</code></pre>
+        </section>
+
+        <section>
+            <h2>Ciclo WHILE - Iterazione con Condizione</h2>
+            <p>Il ciclo <code>while</code> continua finché la condizione è vera:</p>
+            <pre><code>&lt;?php
+    $numero = 1;
+    
+    while ($numero <= 5) {
+        echo "Numero: " . $numero . "&lt;br&gt;";
+        $numero++;
+    }
+?&gt;</code></pre>
+        </section>
+
+        <div class="button-container">
+            <button onclick="navigateTo('index.html')"><span>Torna alla Home</span></button>
+            <button onclick="navigateTo('get-post.html')"><span>GET e POST</span></button>
+            <button onclick="navigateTo('array.html')"><span>Array Associativi</span></button>
+        </div>
+        
+        <p><a href="https://www.php.net/manual/it/language.control-structures.php" target="_blank">Documentazione ufficiale sulle strutture di controllo</a></p>
+    </main>
+
+    <script>
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('section, h2, p, pre, ul');
+            
+            elements.forEach(element => {
+                element.classList.add('hidden');
+            });
+            
+            function checkIfInView() {
+                elements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementBottom = element.getBoundingClientRect().bottom;
+                    const isVisible = elementTop < window.innerHeight && elementBottom > 0;
+                    
+                    if (isVisible) {
+                        element.classList.add('show');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', checkIfInView);
+            window.addEventListener('resize', checkIfInView);
+            setTimeout(checkIfInView, 300);
+        }
+
+        function navigateTo(page) {
+            const transition = document.createElement('div');
+            transition.className = 'page-transition';
+            document.body.appendChild(transition);
+            
+            setTimeout(() => {
+                window.location.href = page;
+            }, 500);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            handleScrollAnimations();
+        });
+    </script>
+</body>
+</html>
